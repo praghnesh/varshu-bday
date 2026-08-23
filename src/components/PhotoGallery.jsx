@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Camera } from 'lucide-react';
+import { Camera, Sparkles } from 'lucide-react';
 import { playPopSound } from '../utils/soundFx';
 
 const defaultPhotos = [
-    { id: 1, defaultSrc: '/assets/photo1.png', caption: 'Watching Golden Sunsets Together 🌅', rotateClass: '' },
-    { id: 2, defaultSrc: '/assets/photo2.png', caption: 'Holding Hands Through Every Journey 🤝', rotateClass: 'rotate-right' },
-    { id: 3, defaultSrc: '/assets/photo3.png', caption: 'The Cutest Smile In The World 😊', rotateClass: 'rotate-left' }
+    { id: 1, defaultSrc: '/assets/photo1.png', caption: 'Little Princess Days 👶✨', ageTag: 'Childhood 🌸', rotateClass: '' },
+    { id: 2, defaultSrc: '/assets/photo2.png', caption: 'Fairy Tale Magic Years 🧚‍♀️💫', ageTag: 'Growing Up 💫', rotateClass: 'rotate-right' },
+    { id: 3, defaultSrc: '/assets/photo3.png', caption: 'Gorgeous Queen Today 👑💛', ageTag: 'Present Day ✨', rotateClass: 'rotate-left' }
 ];
 
 export default function PhotoGallery({ onOpenLightbox }) {
@@ -15,7 +15,7 @@ export default function PhotoGallery({ onOpenLightbox }) {
     useEffect(() => {
         const loaded = {};
         defaultPhotos.forEach(p => {
-            const saved = localStorage.getItem(`custom_photo_${p.id}`);
+            const saved = localStorage.getItem(`custom_photo_v3_${p.id}`);
             loaded[p.id] = saved || p.defaultSrc;
         });
         setPhotos(loaded);
@@ -28,7 +28,7 @@ export default function PhotoGallery({ onOpenLightbox }) {
             reader.onload = (evt) => {
                 const imgData = evt.target.result;
                 setPhotos(prev => ({ ...prev, [id]: imgData }));
-                localStorage.setItem(`custom_photo_${id}`, imgData);
+                localStorage.setItem(`custom_photo_v3_${id}`, imgData);
                 playPopSound();
             };
             reader.readAsDataURL(file);
@@ -39,9 +39,10 @@ export default function PhotoGallery({ onOpenLightbox }) {
         <section className="gallery-section">
             <div className="section-header text-center">
                 <h2 className="section-title">
-                    <Camera size={28} style={{ display: 'inline', marginRight: 8 }} /> Precious Moments Gallery
+                    <Sparkles size={28} style={{ display: 'inline', marginRight: 8, color: '#ff758c' }} />
+                    Growing Up Through The Years 🌸
                 </h2>
-                <p className="section-desc">Tap on any photo to zoom, or upload your favorite pictures!</p>
+                <p className="section-desc">Years ga peruguthunna cute memories & journey! Tap on any photo to zoom or replace ✨</p>
             </div>
 
             <div className="gallery-grid">
@@ -55,6 +56,9 @@ export default function PhotoGallery({ onOpenLightbox }) {
                                 className="polaroid-img-wrapper"
                                 onClick={() => onOpenLightbox(currentSrc, item.caption)}
                             >
+                                {item.ageTag && (
+                                    <span className="age-tag-badge">{item.ageTag}</span>
+                                )}
                                 <img src={currentSrc} alt={item.caption} className="polaroid-img" />
                                 <button
                                     className="change-photo-btn"
@@ -82,3 +86,4 @@ export default function PhotoGallery({ onOpenLightbox }) {
         </section>
     );
 }
+
